@@ -1,2 +1,8 @@
-.idea/*
-auth-api/node_modules/*
+### NODE MODULES ###
+/auth-api/node_modules/*
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
