@@ -1,0 +1,8 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-api-gradle
+
+#spring.application.name=product-api-gradle
