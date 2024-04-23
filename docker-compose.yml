@@ -1,17 +1,6 @@
 version: "3"
 services: 
 
-  sales-db:
-    image: mongo:latest
-    container_name: sales-db
-    restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=123456
-    ports:
-      - 27017:27017
-      - 28017:28017
-
   auth-db:
     image: postgres:16
     container_name: auth-db
@@ -22,18 +11,6 @@ services:
       - POSTGRES_PASSWORD=123456
     ports:
       - 54332:5432
-
-  sales_rabbit:
-    image: rabbitmq:3-management
-    container_name: sales_rabbit
-    hostname: sales_rabbit
-    ports:
-      - 5672:5672
-      - 25676:25676
-      - 15672:15672
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
 
   product-db:
     image: postgres:16
@@ -46,4 +23,50 @@ services:
     ports:
       - 54333:5432
 
+  sales-db:
+    image: mongo:latest
+    container_name: sales-db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=123456
+    ports:
+      - 27017:27017
+      - 28017:28017
+
+  auth-api:
+    build: './auth-api'
+    container_name: auth-api
+    environment:
+      - PORT=8080
+    ports:
+      - 8080:8080
+
+  product-api:
+    build: './product-api'
+    container_name: product-api
+    environment:
+      - PORT=8081
+    ports:
+      - 8081:8081
+
+  sales-api:
+    build: './sales-api'
+    container_name: sales-api
+    environment:
+      - PORT=8082
+    ports:
+      - 8082:8082
+
+  sales_rabbit:
+    image: rabbitmq:3-management
+    container_name: sales_rabbit
+    hostname: sales_rabbit
+    ports:
+      - 5672:5672
+      - 25676:25676
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
   
