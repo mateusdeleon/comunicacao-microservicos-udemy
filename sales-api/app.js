@@ -1,8 +1,9 @@
-import express from 'express';
-import {connectMongDb} from './src/config/db/mongoDbConfig.js';
+import express from "express";
+import {connectMongDb} from "./src/config/db/mongoDbConfig.js";
 import {createInitialData} from "./src/config/db/initialData.js";
-import { connectRabbitMq } from './src/config/rabbitmq/rabbitConfig.js'; 
-import checkToken from './src/config/auth/checkToken.js';
+import { connectRabbitMq } from "./src/config/rabbitmq/rabbitConfig.js"; 
+import checkToken from "./src/config/auth/checkToken.js";
+import orderRoutes from "./src/modules/sales/routes/OrderRoutes.js";
 
 const app = express();
 const env = process.env;
@@ -12,7 +13,9 @@ connectMongDb();
 createInitialData();
 connectRabbitMq();
 
+app.use(express.json());
 app.use(checkToken);
+app.use(orderRoutes);
 
 app.get('/api/status', async (req, res) => {
     return res.status(200).json({
