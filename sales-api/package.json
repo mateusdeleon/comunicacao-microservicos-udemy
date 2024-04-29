@@ -8,6 +8,7 @@
     "startDev": "nodemon app.js"
   },
   "dependencies": {
+    "amqplib": "^0.10.4",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
