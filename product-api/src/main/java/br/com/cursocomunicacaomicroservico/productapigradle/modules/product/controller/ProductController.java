@@ -1,8 +1,10 @@
 package br.com.cursocomunicacaomicroservico.productapigradle.modules.product.controller;
 
 import br.com.cursocomunicacaomicroservico.productapigradle.config.exception.SuccessResponse;
+import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductCheckStockRequest;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductRequest;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductResponse;
+import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductSalesResponse;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +56,16 @@ public class ProductController {
     @DeleteMapping("{id}")
     public SuccessResponse delete(@PathVariable Integer id) {
         return productService.delete(id);
+    }
+
+    @PostMapping("check-stock")
+    public SuccessResponse checkProductsStock(@RequestBody ProductCheckStockRequest productCheckStockRequest) {
+        return productService.checkProductsStock(productCheckStockRequest);
+    }
+
+    @GetMapping("{productId}/sales")
+    public ProductSalesResponse findProductSales(@PathVariable Integer productId) {
+        return productService.findProductSales(productId);
     }
 
 }

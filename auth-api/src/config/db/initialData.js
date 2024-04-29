@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-// import User from "../../modules/user/model/User";
 import User from "../../modules/user/model/User.js";
 
 export async function createInitialData() {
