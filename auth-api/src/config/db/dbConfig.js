@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-import { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } from "../constants/secrets";
+import { DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT } from "../constants/secrets.js";
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
