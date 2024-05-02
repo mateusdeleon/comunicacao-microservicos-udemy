@@ -34,17 +34,26 @@ app.get("/api/initial-data", async (req,res) => {
     return res.json({ message: "Data created." });
 })
 
+app.get("/", async (req, res) => {
+    return res.status(200).json(getOkResponse())
+})
+
+app.get("/api/status", async (req, res) => {
+    return res.status(200).json(getOkResponse())
+})
+
+function getOkResponse() {
+    return {
+        service: "Sales-API",
+        status: "up",
+        httpStatus: 200,
+    };
+}
+
 app.use(tracing);
 app.use(checkToken);
 app.use(orderRoutes);
 
-app.get('/api/status', async (req, res) => {
-    return res.status(200).json({
-        service: "Sales-API",
-        status: "up",
-        httpStatus: 200,
-    })
-})
 
 app.listen(PORT, () => {
     console.info(`Server started sucessfully at port ${PORT}`);

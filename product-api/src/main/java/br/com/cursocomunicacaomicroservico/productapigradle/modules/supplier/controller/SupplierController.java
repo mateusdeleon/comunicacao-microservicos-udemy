@@ -4,17 +4,18 @@ import br.com.cursocomunicacaomicroservico.productapigradle.config.exception.Suc
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.supplier.dto.SupplierRequest;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.supplier.dto.SupplierResponse;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.supplier.service.SupplierService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/supplier")
 public class SupplierController {
 
-    @Autowired
-    private SupplierService supplierService;
+    private final SupplierService supplierService;
 
     @PostMapping
     public SupplierResponse save(@RequestBody SupplierRequest supplierRequest) {

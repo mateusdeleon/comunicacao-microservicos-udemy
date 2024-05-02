@@ -6,17 +6,17 @@ import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductResponse;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.dto.ProductSalesResponse;
 import br.com.cursocomunicacaomicroservico.productapigradle.modules.product.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/product")
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
     @PostMapping
     public ProductResponse save(@RequestBody ProductRequest productRequest) {

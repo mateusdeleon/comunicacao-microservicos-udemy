@@ -30,6 +30,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class ProductService {
 
     private static final Integer ZERO = 0;
+    private static final String AUTHORIZATION = "Authorization";
     private static final String TRANSACTION_ID = "transactionid";
     private static final String SERVICE_ID = "serviceid";
 
@@ -38,6 +39,7 @@ public class ProductService {
     private final CategoryService categoryService;
     private final SalesConfirmationSender salesConfirmationSender;
     private final SalesClient salesClient;
+    private final ObjectMapper objectMapper;
 
     public ProductResponse findByIdProduct(Integer id) {
         return ProductResponse.of(findById(id));
@@ -223,17 +225,19 @@ public class ProductService {
     private SalesProductResponse getSalesByProductId(Integer productId) {
         try {
             var currentRequest = getCurrentRequest();
+            var token = currentRequest.getHeader(AUTHORIZATION);
             var transactionid = currentRequest.getHeader(TRANSACTION_ID);
             var serviceid = currentRequest.getAttribute(SERVICE_ID);
             log.info("Request to GET orders by productId with data {} | [transactionId: {} | serviceId: {}]",
                     productId, transactionid, serviceid);
             var response = salesClient
-                    .findSalesByProductId(productId)
+                    .findSalesByProductId(productId, token, transactionid)
                     .orElseThrow(() -> new ValidationException("Sales not found by this product."));
             log.info("Response to GET orders by productId with data {} | [transactionId: {} | serviceId: {}]",
-                    new ObjectMapper().writeValueAsString(response), transactionid, serviceid);
+                    objectMapper.writeValueAsString(response), transactionid, serviceid);
             return response;
         } catch (Exception ex) {
+            log.error("Error trying to call Sales-API: {}", ex.getMessage());
             throw new ValidationException("There was an error trying to get the product's sales.");
         }
     }
@@ -244,7 +248,7 @@ public class ProductService {
             var transactionid = currentRequest.getHeader(TRANSACTION_ID);
             var serviceid = currentRequest.getAttribute(SERVICE_ID);
             log.info("Request to POST product stock with data {} | [transactionId: {} | serviceId: {}]",
-                    new ObjectMapper().writeValueAsString(productCheckStockRequest),
+                    objectMapper.writeValueAsString(productCheckStockRequest),
                     transactionid,
                     serviceid);
             if (isEmpty(productCheckStockRequest) || isEmpty(productCheckStockRequest.getProducts())) {
@@ -255,7 +259,7 @@ public class ProductService {
                     .forEach(this::validateStock);
             var response = SuccessResponse.create("The stock is ok.");
             log.info("Response to POST product stock with data {} | [transactionId: {} | serviceId: {}]",
-                    new ObjectMapper().writeValueAsString(response),
+                    objectMapper.writeValueAsString(response),
                     transactionid,
                     serviceid);
             return response;

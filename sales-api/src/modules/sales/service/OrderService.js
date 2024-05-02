@@ -2,7 +2,10 @@ import OrderRepository from "../repository/OrderRepository.js";
 import { sendMessageToProductStockUpdateQueue } from "../../product/rabbitmq/productStockUpdateSender.js";
 import { ACCEPTED, REJECTED, PENDING } from "../status/OrderStatus.js";
 import OrderException from "../exception/OrderException.js";
-import { BAD_REQUEST } from "../../../config/constants/httpStatus.js";
+import { 
+    BAD_REQUEST, 
+    SUCCESS,
+    INTERNAL_SERVER_ERROR } from "../../../config/constants/httpStatus.js";
 import ProductClient from "../../product/client/ProductClient.js";
 
 class OrderService {
@@ -25,7 +28,7 @@ class OrderService {
             this.sendMessage(createdOrder, transactionid);
 
             let response = {
-                status: httpStatus.SUCCESS,
+                status: SUCCESS,
                 createdOrder,
             };
             console.info(
@@ -36,7 +39,7 @@ class OrderService {
             
         } catch (err) {
             return {
-                status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
+                status: err.status ? err.status : INTERNAL_SERVER_ERROR,
                 message: err.message,
             };
         }
@@ -50,7 +53,7 @@ class OrderService {
             updatedAt: new Date(),
             transactionid,
             serviceid,
-            products: orderData.prodcuts,
+            products: orderData.products,
         };
     }
 
@@ -104,7 +107,7 @@ class OrderService {
     sendMessage(createdOrder, transactionid) {
         const message = {
             salesId: createdOrder.id,
-            prodcuts: createdOrder.prodcuts,
+            products: createdOrder.products,
             transactionid,
         }
         sendMessageToProductStockUpdateQueue(message);
@@ -128,7 +131,7 @@ class OrderService {
             }
 
             let response = {
-                status: httpStatus.SUCCESS,
+                status: SUCCESS,
                 existingOrder,
             };
             console.info(
@@ -139,7 +142,7 @@ class OrderService {
             
         } catch (err) {
             return {
-                status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
+                status: err.status ? err.status : INTERNAL_SERVER_ERROR,
                 message: err.message,
             }
         }        
@@ -162,7 +165,7 @@ class OrderService {
             }
 
             let response = {
-                status: httpStatus.SUCCESS,
+                status: SUCCESS,
                 orders,
             };
             console.info(
@@ -173,7 +176,7 @@ class OrderService {
             
         } catch (err) {
             return {
-                status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
+                status: err.status ? err.status : INTERNAL_SERVER_ERROR,
                 message: err.message,
             }
         }        
@@ -194,7 +197,7 @@ class OrderService {
             }
 
             let response = {
-                status: httpStatus.SUCCESS,
+                status: SUCCESS,
                 salesIds: orders.map((order) => {return order.id}),
             };
             console.info(
@@ -206,7 +209,7 @@ class OrderService {
             
         } catch (err) {
             return {
-                status: err.status ? err.status : httpStatus.INTERNAL_SERVER_ERROR,
+                status: err.status ? err.status : INTERNAL_SERVER_ERROR,
                 message: err.message,
             }
         }        
